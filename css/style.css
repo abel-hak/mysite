@@ -1,0 +1,72 @@
+*{
+    font-size: 1.2rem;
+}
+
+body{
+    background-color: rgba(7, 13, 19, 0.877);
+    color:rgba(255, 255, 255, 0.877);
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+form{
+    border:1px solid rgb(63, 61, 61);
+    box-shadow: 2px 2px 5px white;
+    width: fit-content;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 10px;
+}
+
+input, select{
+    border:1px solid white;
+    background-color:transparent;
+    color:rgba(255, 255, 255, 0.897);
+    padding: 30px 20x;
+    font-size: 0.8rem;
+    font-weight: 100;
+    display: flex;
+    justify-content: center;
+}
+
+option{
+    color:black;
+}
+
+div{
+    padding: 10px;
+}
+button{
+    margin-top: 30px;
+    cursor: pointer;
+}
+
+.btn{
+    background:rgba(7, 13, 19, 0.877);
+    border: none;
+    padding: 0px;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.maincontent{
+    display: flex;
+    flex-direction: column;
+    color: green;
+    font-weight: 100;
+    align-items: center;
+}
+.maincontent h5{
+    color:rgb(25, 126, 25);
+}
+.maincontent p{
+    color: rgba(255, 255, 255, 0.651);
+    width: auto;
+    display: flex;
+}
