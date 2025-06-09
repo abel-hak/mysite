@@ -1,5 +1,4 @@
 # IDE and Editor files
-.vscode/
 .idea/
 *.swp
 *.swo
@@ -32,3 +31,5 @@ access_log
 .Trashes
 ehthumbs.db
 Thumbs.db
+temp_auto_push.bat
+temp_interactive_push.bat
