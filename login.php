@@ -6,24 +6,28 @@ $message = '';
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'] ?? '';
-    $password = $_POST['password'] ?? '';
-    
-
-    $user = getUser($username);
-    echo '<pre>'; print_r($user); echo '</pre>';
-
-    if ($user && $password === $user['pass']) {
-        $_SESSION['user'] = ['username' => $username, 'role' => $user['role']];
-        
-        if ($user['role'] === 'admin') {
-            header('Location: admin.php');
-        } else {
-            header('Location: index.php');
-        }
-        exit;
+    // CSRF check
+    if (!isset($_POST['csrf_token']) || !check_csrf_token($_POST['csrf_token'])) {
+        $message = 'Invalid CSRF token. Please reload and try again.';
     } else {
-        $message = 'Invalid username or password';
+        $username = validate_string($_POST['username'] ?? '', 3, 30);
+        $password = $_POST['password'] ?? '';
+        if (!$username || !$password) {
+            $message = 'Please enter a valid username and password.';
+        } else {
+            $user = authenticateUser($username, $password);
+            if ($user) {
+                $_SESSION['user'] = ['username' => $username, 'role' => $user['role']];
+                if ($user['role'] === 'admin') {
+                    header('Location: admin.php');
+                } else {
+                    header('Location: index.php');
+                }
+                exit;
+            } else {
+                $message = 'Invalid username or password';
+            }
+        }
     }
 }
 
@@ -73,6 +77,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
                     <?php endif; ?>
                     
                     <form method="POST">
+    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">>
                         <div class="form-group">
                             <label for="username">Username</label>
                             <input type="text" id="username" name="username" required>

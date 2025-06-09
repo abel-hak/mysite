@@ -17,32 +17,7 @@ $categories = getCategories();
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <header class="header">
-        <div class="container">
-            <div class="nav-brand">
-                <h1><a href="index.php">E-Shop</a></h1>
-            </div>
-            <nav class="nav-menu">
-                <a href="index.php">Home</a>
-                <a href="cart.php">Cart (<span id="cart-count">0</span>)</a>
-                <a href="#" id="wishlist-link">Wishlist (<span id="wishlist-count">0</span>)</a>
-                <?php if (isLoggedIn()): ?>
-                    <?php if (isAdmin()): ?>
-                        <a href="admin.php">Admin</a>
-                    <?php endif; ?>
-                    <a href="login.php?action=logout">Logout</a>
-                <?php else: ?>
-                    <a href="login.php">Login</a>
-                    <a href="signup.php">Signup</a>
-                <?php endif; ?>
-            </nav>
-            <div class="nav-toggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
-    </header>
+    <?php include 'includes/header.php'; ?>
 
     <main class="main">
         <section class="hero">
@@ -88,18 +63,27 @@ $categories = getCategories();
                         <div class="product-card" data-id="<?= $product['id'] ?>">
                             <div class="product-image">
                                 <img src="images/<?= htmlspecialchars($product['image']) ?>" alt="<?= htmlspecialchars($product['name']) ?>">
-                                <button class="wishlist-btn" data-id="<?= $product['id'] ?>">♡</button>
+                                <button class="wishlist-btn<?= isInWishlist($product['id']) ? ' active' : '' ?>" data-id="<?= $product['id'] ?>">
+                                    <?= isInWishlist($product['id']) ? '♥' : '♡' ?>
+                                </button>
                             </div>
                             <div class="product-info">
                                 <h3><?= htmlspecialchars($product['name']) ?></h3>
                                 <p class="product-price">
                                     <?= formatPrice($product['price'], $product['discount_price']) ?>
                                 </p>
-                                <p class="product-stock">Stock: <?= $product['stock'] ?></p>
+                                <p class="product-stock" style="color: <?= $product['stock'] > 0 ? '#2c5282' : '#e53e3e' ?>">
+                                    <?= $product['stock'] > 0 ? "Stock: {$product['stock']}" : "Out of Stock" ?>
+                                </p>
                                 <div class="product-actions">
                                     <a href="product.php?id=<?= $product['id'] ?>" class="btn btn-secondary">View Details</a>
-                                    <button class="btn btn-primary add-to-cart" data-id="<?= $product['id'] ?>" data-name="<?= htmlspecialchars($product['name']) ?>" data-price="<?= $product['discount_price'] ?: $product['price'] ?>">
-                                        Add to Cart
+                                    <button class="btn btn-primary add-to-cart" 
+                                        data-id="<?= $product['id'] ?>" 
+                                        data-name="<?= htmlspecialchars($product['name']) ?>" 
+                                        data-price="<?= $product['discount_price'] ?: $product['price'] ?>" 
+                                        <?= $product['stock'] <= 0 ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : '' ?>
+                                    >
+                                        <?= $product['stock'] > 0 ? 'Add to Cart' : 'Out of Stock' ?>
                                     </button>
                                 </div>
                             </div>
@@ -115,55 +99,13 @@ $categories = getCategories();
             </div>
         </section>
 
-        <section class="hero2">
-            <div class="container">
-                <img class="banner"src="./images/banner1.avif" alt="banner">
-                <img class="banner"src="./images/banner.avif" alt="banner">
-                
-            </div>
-        </section>
-
-                <section class="products">
-            <div class="container">
-                <div class="products-grid">
-                    <?php foreach ($products as $product): ?>
-                        <div class="product-card" data-id="<?= $product['id'] ?>">
-                            <div class="product-image">
-                                <img src="images/<?= htmlspecialchars($product['image']) ?>" alt="<?= htmlspecialchars($product['name']) ?>">
-                                <button class="wishlist-btn" data-id="<?= $product['id'] ?>">♡</button>
-                            </div>
-                            <div class="product-info">
-                                <h3><?= htmlspecialchars($product['name']) ?></h3>
-                                <p class="product-price">
-                                    <?= formatPrice($product['price'], $product['discount_price']) ?>
-                                </p>
-                                <p class="product-stock">Stock: <?= $product['stock'] ?></p>
-                                <div class="product-actions">
-                                    <a href="product.php?id=<?= $product['id'] ?>" class="btn btn-secondary">View Details</a>
-                                    <button class="btn btn-primary add-to-cart" data-id="<?= $product['id'] ?>" data-name="<?= htmlspecialchars($product['name']) ?>" data-price="<?= $product['discount_price'] ?: $product['price'] ?>">
-                                        Add to Cart
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-                
-                <?php if (empty($products)): ?>
-                    <div class="no-products">
-                        <p>No products found. Try adjusting your search or filter criteria.</p>
-                    </div>
-                <?php endif; ?>
-            </div>
-        </section>
     </main>
 
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 E-Shop. All rights reserved. | Practice Project for XAMPP</p>
+            <p>&copy; <?php echo date('Y'); ?> E-Shop. All rights reserved. | Practice Project for XAMPP</p>
         </div>
     </footer>
-
     <script src="script.js"></script>
 </body>
 </html>

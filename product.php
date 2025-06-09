@@ -28,31 +28,7 @@ $reviews = [
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <header class="header">
-        <div class="container">
-            <div class="nav-brand">
-                <h1><a href="index.php">E-Shop</a></h1>
-            </div>
-            <nav class="nav-menu">
-                <a href="index.php">Home</a>
-                <a href="cart.php">Cart (<span id="cart-count">0</span>)</a>
-                <a href="#" id="wishlist-link">Wishlist (<span id="wishlist-count">0</span>)</a>
-                <?php if (isLoggedIn()): ?>
-                    <?php if (isAdmin()): ?>
-                        <a href="admin.php">Admin</a>
-                    <?php endif; ?>
-                    <a href="login.php?action=logout">Logout</a>
-                <?php else: ?>
-                    <a href="login.php">Login</a>
-                <?php endif; ?>
-            </nav>
-            <div class="nav-toggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
-    </header>
+    <?php include 'includes/header.php'; ?>
 
     <main class="main">
         <div class="container">
