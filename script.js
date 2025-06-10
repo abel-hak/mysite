@@ -1,3 +1,28 @@
+function showPopup(message, type = 'success') {
+    // Remove existing popup if any
+    $('.custom-popup').remove();
+
+    // Create new popup
+    const popup = $(`
+        <div class="custom-popup ${type}">
+            <span class="icon">${type === 'success' ? '✓' : '✕'}</span>
+            <p class="message">${message}</p>
+        </div>
+    `);
+
+    // Add to body
+    $('body').append(popup);
+
+    // Show popup
+    setTimeout(() => popup.addClass('show'), 100);
+
+    // Hide and remove after 3 seconds
+    setTimeout(() => {
+        popup.removeClass('show');
+        setTimeout(() => popup.remove(), 300);
+    }, 3000);
+}
+
 $(document).ready(function() {
     // Initialize wishlist buttons
     function updateWishlistButton(btn, isInWishlist) {
@@ -89,7 +114,15 @@ $(document).ready(function() {
         const productId = button.data('id');
         const productName = button.data('name');
         const productPrice = button.data('price');
-
+        
+        // Get quantity from the input field if it exists, otherwise use 1
+        const quantity = parseInt($('input[name="quantity"]').val()) || 1;
+        
+        if (isNaN(quantity) || quantity < 1) {
+            showPopup('Please enter a valid quantity', 'error');
+            return;
+        }
+        
         $.ajax({
             url: 'cart.php',
             type: 'POST',
@@ -97,22 +130,32 @@ $(document).ready(function() {
             data: {
                 id: productId,
                 name: productName,
-                price: productPrice
+                price: productPrice,
+                quantity: quantity
             },
             headers: {
                 'X-Requested-With': 'XMLHttpRequest'
             },
             success: function(response) {
-                if (response.success) {
-                    $('#cart-count').text(response.cartCount);
-                    alert(response.message || 'Item added to cart successfully!');
-                } else {
-                    alert(response.error || 'Error adding item to cart');
+                try {
+                    if (typeof response === 'string') {
+                        response = JSON.parse(response);
+                    }
+                    
+                    if (response.success) {
+                        $('#cart-count').text(response.cartCount);
+                        showPopup(response.message || 'Item added to cart successfully!', 'success');
+                    } else {
+                        showPopup(response.error || 'Error adding item to cart', 'error');
+                    }
+                } catch (e) {
+                    showPopup('Error processing server response', 'error');
+                    console.error('Error:', e);
                 }
             },
             error: function(xhr, status, error) {
                 console.error('Error:', error);
-                alert('Error adding item to cart');
+                showPopup('Error adding item to cart', 'error');
             }
         });
     });

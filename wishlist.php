@@ -28,6 +28,14 @@ $wishlistItems = getWishlist();
     <link rel="stylesheet" href="style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .main-content {
+            flex: 1;
+        }
         .wishlist-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -101,9 +109,10 @@ $wishlistItems = getWishlist();
     </style>
 </head>
 <body>
-        <?php include 'includes/header.php'; ?>
+    <?php include 'includes/header.php'; ?>
 
-    <div class="wishlist-container">
+    <div class="main-content">
+        <div class="wishlist-container">
         <h1>My Wishlist</h1>
         
         <?php if (isset($_GET['msg']) && $_GET['msg'] === 'removed'): ?>
@@ -142,9 +151,10 @@ $wishlistItems = getWishlist();
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
+        </div>
     </div>
 
-        <footer class="footer">
+    <footer class="footer">
         <div class="container">
             <p>&copy; <?php echo date('Y'); ?> E-Shop. All rights reserved. | Practice Project for XAMPP</p>
         </div>

@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once 'config.php';
 
 // Check if user is admin
@@ -242,6 +243,7 @@ $orders = $pdo->query("SELECT o.*, u.username AS customer, p.name AS product_nam
             <div class="tab-content" id="add-product-tab">
                 <h2>Add New Product</h2>
                 <form method="POST" class="product-form">
+                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
                     <input type="hidden" name="action" value="add_product">
                     
                     <div class="form-grid">

@@ -5,7 +5,6 @@
 *.swo
 
 # Configuration files with sensitive data
-config.php
 
 # Dependency directories
 vendor/

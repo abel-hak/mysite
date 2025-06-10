@@ -146,14 +146,22 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $data = [
             'id'    => $_POST['id'],
             'name'  => $_POST['name'],
-            'price' => $_POST['price']
+            'price' => $_POST['price'],
+            'quantity' => isset($_POST['quantity']) ? (int)$_POST['quantity'] : 1
         ];
         $result = createOrder($data);
-        echo json_encode([
-            'success' => true,
-            'cartCount' => getUserCartCount(),
-            'message' => 'Item added to cart successfully'
-        ]);
+        if ($result['success']) {
+            echo json_encode([
+                'success' => true,
+                'cartCount' => getUserCartCount(),
+                'message' => 'Item added to cart successfully'
+            ]);
+        } else {
+            echo json_encode([
+                'success' => false,
+                'error' => $result['error'] ?? 'Error adding item to cart'
+            ]);
+        }
         exit;
     }
 }
@@ -288,19 +296,12 @@ function getproductImage($pId){
                             <span>Shipping:</span>
                             <span id="shipping">ETB <?= number_format($cartTotals['shipping'], 2) ?></span>
                         </div>
-                        <div class="summary-row discount-section" style="display: none;">
-                            <span>Discount:</span>
-                            <span id="discount">-ETB 0.00</span>
-                        </div>
+
                         <div class="summary-row total">
                             <span>Total:</span>
                             <span id="total">ETB <?= number_format($cartTotals['total'], 2) ?></span>
                         </div>
                         
-                        <div class="discount-code">
-                            <input type="text" id="discount-input" placeholder="Enter discount code">
-                            <button id="apply-discount" class="btn btn-secondary">Apply</button>
-                        </div>
                         
                         <div class="cart-actions">
                             <a href="index.php" class="btn btn-outline">Continue Shopping</a>

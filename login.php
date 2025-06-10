@@ -77,7 +77,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
                     <?php endif; ?>
                     
                     <form method="POST">
-    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">>
+    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
                         <div class="form-group">
                             <label for="username">Username</label>
                             <input type="text" id="username" name="username" required>

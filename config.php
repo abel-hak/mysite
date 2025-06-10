@@ -159,7 +159,8 @@ function createOrder(array $product) {
         $existingOrder = $stmt->fetch(PDO::FETCH_ASSOC);
 
         // Calculate new quantity
-        $newQuantity = $existingOrder ? $existingOrder['quantity'] + 1 : 1;
+        $quantity = isset($product['quantity']) ? (int)$product['quantity'] : 1;
+        $newQuantity = $existingOrder ? $existingOrder['quantity'] + $quantity : $quantity;
 
         // Check if new quantity exceeds available stock
         if ($newQuantity > $productInfo['stock']) {
@@ -179,7 +180,7 @@ function createOrder(array $product) {
             $success = $stmt->execute([
                 $userid,
                 $product['id'],
-                1, // Initial quantity
+                $quantity,
                 $product['price']
             ]);
         }
